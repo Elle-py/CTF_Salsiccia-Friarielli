@@ -1,0 +1,4 @@
+1- Scrivere i file html degli user
+2- Implementare la SQL injection e proteggere uno degli user
+3- Creare la Flag criptata e assegnare la chiave ad uno degli user attaccabili
+4- Testing

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leggi un file</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Leggi un file</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% if content %}
+        <pre>{{ content }}</pre>
+    {% endif %}
+    <form method="POST">
+        <input type="text" name="file" placeholder="Nome del file">
+        <button type="submit">Leggi</button>
+    </form>
+    <a href="/">Torna alla Home</a>
+</body>
+</html>
+
