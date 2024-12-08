@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, send_file, jsonify, redirect, url_for
 import os
 import sqlite3
+import sys
 
 app = Flask(__name__)
+
+#disabilitazione del buffering per visualizzare messaggi di [DEBUG]
+sys.stdout.reconfigure(line_buffering=True)
 
 def init_db():
     # Connessione al database SQLite
@@ -15,37 +19,23 @@ def init_db():
         id INTEGER PRIMARY KEY,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        dashboard_file TEXT NOT NULL,
-        secure_login INTEGER DEFAULT 0
+        dashboard_file TEXT NOT NULL
     )
     ''')
 
-    # Inserimento degli utenti (3 vulnerabili e uno sicuro)
+    # Inserimento degli utenti (4 vulnerabili e uno sicuro)
     users = [
-        (1, 'HINT', 'HINT', 'HINT.html', 0),
-        (2, 'Oznerol', 'Oznerol','Oznerol.html', 0),
-        (3, 'Annavoigairam', 'Annavoigairam', 'Annavoigairam.html', 0),
-        (4, 'secure_user', 'SuperSecurePass!', 'secure_user.html', 1),
+        (1, 'PizzaioloAdmin69', 'S&F4thewin', 'db_utenti_steg.html'),
+        (2, 'HINT', 'HINT', 'HINT.html'),
+        (3, 'Oznerol', 'Oznerol','Oznerol.html'),
+        (4, 'Annavoigairam', 'Annavoigairam', 'Annavoigairam.html'),
+        (5, 'brain', 'heart', 'secure_user.html'),
     ]
     
     # Salva i cambiamenti
-    c.executemany("INSERT OR IGNORE INTO users (id, username, password, dashboard_file, secure_login) VALUES (?, ?, ?, ?, ?)", users)
+    c.executemany("INSERT OR IGNORE INTO users (id, username, password, dashboard_file) VALUES (?, ?, ?, ?)", users)
     conn.commit()
     conn.close()
-
-# Percorso sicuro per i file accessibili
-BASE_DIR = os.path.join(os.getcwd(), "files")
-
-# Crea directory e file per la demo
-os.makedirs(BASE_DIR, exist_ok=True)
-with open(os.path.join(BASE_DIR, "example.txt"), "w") as f:
-    f.write("Questo è un file demo. Non contiene la flag.")
-
-# Percorso del file protetto
-FLAG_PATH = os.path.join(os.getcwd(), "flag.txt")
-if not os.path.exists(FLAG_PATH):
-    with open(FLAG_PATH, "w") as f:
-        f.write("CTF{example_flag}")
 
 # Funzione di login
 @app.route("/", methods=["GET", "POST"])
@@ -54,15 +44,33 @@ def index():
         username = request.form.get("username")
         password = request.form.get("password")
         
-        # Connessione al database per verificare le credenziali
+        # Debug: Stampa credenziali ricevute
+        print(f"[DEBUG] Tentativo di login: Username: {username}, Password: {password}")
+
         conn = sqlite3.connect("users.db")
         c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
-        user = c.fetchone()
+
+
+
+        try:
+            if username == "brain":
+                # Query sicura per l'utente protetto
+                c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            else:
+                # Query vulnerabile costruita manualmente
+                query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
+                print(f"[DEBUG] Query eseguita: {query}")
+                c.execute(query)
+                
+            user = c.fetchone()#modificato
+        except sqlite3.OperationalError as e:
+            print(f"[DEBUG] Errore SQL: {e}")
+            user = None
+
         conn.close()
 
         if user:
-            return redirect(url_for('user_dashboard', username=username))  # Se le credenziali sono corrette, reindirizza al dashboard dell'utente
+            return redirect(url_for("user_dashboard", username=user[1]))
         else:
             return render_template("index.html", error="Credenziali errate!")
     
@@ -85,7 +93,7 @@ def user_dashboard(username):
     else:
         return "Utente non trovato."
 
-@app.route("/read", methods=["GET", "POST"])
+''''@app.route("/read", methods=["GET", "POST"])
 def read_file():
     if request.method == "POST":
         filename = request.form.get("file")
@@ -94,7 +102,6 @@ def read_file():
 
         # Verifica del percorso del file
         filepath = os.path.join(BASE_DIR, filename)
-        filepath = os.path.join("secrets", filename)
         try:
             if not filepath.startswith(BASE_DIR):  # Protezione contro Directory Traversal
                 return render_template("read.html", error="Accesso negato!")
@@ -105,10 +112,10 @@ def read_file():
             return render_template("read.html", content=content)
         except FileNotFoundError:
             return render_template("read.html", error="File non trovato!")
-    return render_template("read.html")
+    return render_template("read.html")'''
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True,host="0.0.0.0", port=5000)
     
 
