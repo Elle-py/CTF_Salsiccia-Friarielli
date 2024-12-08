@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_file, jsonify, redirect, url_for
+from flask import Flask, request, render_template, send_file, jsonify, redirect, url_for, send_from_directory
 import os
 import sqlite3
 import sys
@@ -113,6 +113,10 @@ def read_file():
         except FileNotFoundError:
             return render_template("read.html", error="File non trovato!")
     return render_template("read.html")'''
+
+@app.route("/download/<path:filename>")
+def download_file(filename):
+    return send_from_directory('static', filename, as_attachment=True)
 
 if __name__ == "__main__":
     init_db()
