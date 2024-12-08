@@ -1,6 +1,17 @@
-<h2>Benvenuto, guest02!</h2>
-<p>Questa è una <span style="color:red;">sfida</span> interessante!</p>
-<p>Risolvi l'indovinello seguente:</p>
-<blockquote>
-    <i>"Quale chiave apre tutte le porte senza toccarle?"</i>
-</blockquote>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annavoigairam Dashboard</title>
+</head>
+<body>
+    <p>Now you're only missing the pizza</p>
+    <!-- Mostra l'immagine -->
+    <img src="{{ url_for('static', filename='images/5ym_AES_k3y.png') }}" alt="Salsiccia e Friarielli" width="300">
+
+    <!-- Link per il download -->
+    <p><a href="{{ url_for('download_file', filename='images/5ym_AES_k3y.png') }}" download>Take the pizza cutter</a></p>
+</body>
+</html>
+

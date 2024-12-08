@@ -29,7 +29,8 @@ def init_db():
         (2, 'HINT', 'HINT', 'HINT.html'),
         (3, 'Oznerol', 'Oznerol','Oznerol.html'),
         (4, 'Annavoigairam', 'Annavoigairam', 'Annavoigairam.html'),
-        (5, 'brain', 'heart', 'secure_user.html'),
+        (5, 'hINt@02', 'hINt@02', 'hINt@02.html'),
+        (6, 'brain', 'heart', 'symCrypt_AES.html'),
     ]
     
     # Salva i cambiamenti

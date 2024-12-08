@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get the FLAG!</title>
+</head>
+<body>
+    <p>Now you only need to cut it!</p>
+    <!-- Mostra l'immagine -->
+    <img src="{{ url_for('static', filename='images/5ym_AES_f14g.png') }}" alt="Salsiccia e Friarielli" width="300">
+
+    <!-- Link per il download -->
+    <p><a href="{{ url_for('download_file', filename='images/5ym_AES_f14g.png') }}" download>Take the pizza</a></p>
+</body>
+</html>
+
